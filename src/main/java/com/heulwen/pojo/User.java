@@ -69,7 +69,7 @@ public class User implements Serializable {
     @Column(name = "password")
     String password;
     @Column(name = "isActive")
-    Boolean isActive = true;
+    Boolean isActive;
     @Column(name = "avatar")
     String avatar;
     @Basic(optional = false)

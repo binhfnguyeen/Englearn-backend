@@ -41,6 +41,7 @@ public class UserService {
         
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setIsActive(Boolean.TRUE);
         user.setRole(Role.USER.name());
         
         User saved = userRepository.save(user);
