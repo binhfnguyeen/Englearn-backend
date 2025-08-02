@@ -4,6 +4,7 @@
  */
 package com.heulwen.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import  jakarta.persistence.Basic;
@@ -23,6 +24,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import jakarta.persistence.Transient;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -76,13 +79,20 @@ public class User implements Serializable {
     @Column(name = "role")
     String role;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
     Set<LearnedWord> learnedWordSet;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
     Set<Conservation> conservationSet;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
     Set<Progress> progressSet;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
     Set<TestResults> testResultsSet;
+    
+    @Transient
+    MultipartFile file;
 
     @Override
     public int hashCode() {

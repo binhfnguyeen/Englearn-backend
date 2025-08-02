@@ -4,6 +4,8 @@
  */
 package com.heulwen.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.heulwen.dto.request.UserCreationRequest;
 import com.heulwen.dto.response.UserResponse;
 import com.heulwen.exceptions.AppException;
@@ -12,13 +14,25 @@ import com.heulwen.mapper.UserMapper;
 import com.heulwen.pojo.Role;
 import com.heulwen.pojo.User;
 import com.heulwen.repositories.UserRepository;
+import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -28,27 +42,53 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor // Thay the autowire
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class UserService {
-    
+public class UserService implements UserDetailsService {
+
     UserRepository userRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
-    
-    public UserResponse createUser(UserCreationRequest request){
-        if (userRepository.existsByUsername(request.getUsername())){
+    Cloudinary cloudinary;
+
+    public UserResponse createUser(UserCreationRequest request, MultipartFile avatar) {
+        if (userRepository.existsByUsername(request.getUsername())) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
-        
+
         User user = userMapper.toUser(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setIsActive(Boolean.TRUE);
         user.setRole(Role.USER.name());
         
+        if (!avatar.isEmpty()){
+            try {
+                Map res = cloudinary.uploader().upload(avatar.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                user.setAvatar(res.get("secure_url").toString());
+            } catch (IOException ex){
+                Logger.getLogger(UserService.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
         User saved = userRepository.save(user);
         return userMapper.toUserResponse(saved);
     }
-    
-    public List<UserResponse> getUsers(){
+
+    public List<UserResponse> getUsers() {
         return userRepository.findAll().stream().map(userMapper::toUserResponse).toList();
+    }
+
+    public User getUserByUsername(String username) {
+        return this.userRepository.getUserByUsername(username);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User u = this.getUserByUsername(username);
+        if (u == null) {
+            throw new UsernameNotFoundException("Invalid username!");
+        }
+        Set<GrantedAuthority> authorities = new HashSet<>();
+        authorities.add(new SimpleGrantedAuthority(u.getRole()));
+        return new org.springframework.security.core.userdetails.User(
+                u.getUsername(), u.getPassword(), authorities);
     }
 }

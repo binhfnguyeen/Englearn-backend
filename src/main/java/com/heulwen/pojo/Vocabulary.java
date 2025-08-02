@@ -4,28 +4,31 @@
  */
 package com.heulwen.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
-import  jakarta.persistence.Basic;
-import  jakarta.persistence.Column;
-import  jakarta.persistence.Entity;
-import  jakarta.persistence.GeneratedValue;
-import  jakarta.persistence.GenerationType;
-import  jakarta.persistence.Id;
-import  jakarta.persistence.JoinColumn;
-import  jakarta.persistence.JoinTable;
-import  jakarta.persistence.Lob;
-import  jakarta.persistence.ManyToMany;
-import  jakarta.persistence.NamedQueries;
-import  jakarta.persistence.NamedQuery;
-import  jakarta.persistence.OneToMany;
-import  jakarta.persistence.Table;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -59,15 +62,27 @@ public class Vocabulary implements Serializable {
     @Column(name = "part_of_speech")
     String partOfSpeech;
     @Lob
-    @Column(name = "example")
-    String example;
+    @Column(name = "speech")
+    String speech;
+    @Column(name = "picture")
+    String picture;
     @JoinTable(name = "vocabulary_topic", joinColumns = {
         @JoinColumn(name = "vocabulary_id", referencedColumnName = "id")}, inverseJoinColumns = {
         @JoinColumn(name = "topic_id", referencedColumnName = "id")})
     @ManyToMany
+    @JsonIgnore
     Set<Topic> topicSet;
     @OneToMany(mappedBy = "vocabularyId")
+    @JsonIgnore
     Set<LearnedWord> learnedWordSet;
+
+    @Transient
+    @JsonIgnore
+    MultipartFile picFile;
+
+    @Transient
+    @JsonIgnore
+    MultipartFile soundFile;
 
     @Override
     public int hashCode() {
@@ -93,5 +108,5 @@ public class Vocabulary implements Serializable {
     public String toString() {
         return "com.heulwen.pojo.Vocabulary[ id=" + id + " ]";
     }
-    
+
 }

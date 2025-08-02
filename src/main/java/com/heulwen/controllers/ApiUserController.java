@@ -8,40 +8,53 @@ import com.heulwen.dto.request.UserCreationRequest;
 import com.heulwen.dto.response.ApiResponse;
 import com.heulwen.dto.response.UserResponse;
 import com.heulwen.services.UserService;
-import jakarta.validation.Valid;
 import java.util.List;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
  * @author Dell
  */
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class UserController {
+public class ApiUserController {
+
     UserService userService;
-    
-    @PostMapping
-    public ApiResponse<UserResponse> createUser(@Valid @RequestBody UserCreationRequest request){
+
+    @PostMapping(path = "/users" ,consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ApiResponse<UserResponse> createUser(@RequestParam Map<String, String> params, @RequestParam(value = "avatar") MultipartFile avatar) {
+        UserCreationRequest request = UserCreationRequest.builder()
+                .firstName(params.get("firstName"))
+                .lastName(params.get("lastName"))
+                .email(params.get("email"))
+                .phone(params.get("phone"))
+                .username(params.get("username"))
+                .password(params.get("password"))
+                .build();
+
         ApiResponse<UserResponse> response = new ApiResponse<>();
-        
-        response.setResult(userService.createUser(request));
+
+        response.setResult(userService.createUser(request, avatar));
         return response;
     }
-    
-    @GetMapping
-    public ApiResponse<List<UserResponse>> getUsers(){
+
+    @GetMapping("/secure/users")
+    public ApiResponse<List<UserResponse>> getUsers() {
         return ApiResponse.<List<UserResponse>>builder()
                 .code(1000)
                 .result(userService.getUsers())

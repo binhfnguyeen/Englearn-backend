@@ -19,7 +19,11 @@ public enum ErrorCode {
     PASSWORD_INVALID(1004, "Password must be a least 8 characters.", HttpStatus.BAD_REQUEST),
     USER_NOT_EXISTED(1005, "User not existed", HttpStatus.NOT_FOUND),
     UNAUTHENTICATED(1006, "Unauthenticated.", HttpStatus.UNAUTHORIZED),
-    UNAUTHORIZED(1007, "You do not have permission.", HttpStatus.FORBIDDEN);
+    UNAUTHORIZED(1007, "You do not have permission.", HttpStatus.FORBIDDEN),
+    VOCAB_NOT_FOUND(1008, "Vocabulary not found.", HttpStatus.NOT_FOUND),
+    TOPIC_NOT_FOUND(1009 , "Topic not found.", HttpStatus.NOT_FOUND),
+    QUESTION_NOT_FOUND(1010 , "Question not found.", HttpStatus.NOT_FOUND),
+    TEST_NOT_FOUND(1011 , "Test not found.", HttpStatus.NOT_FOUND)
     ;
             
     private final int code;

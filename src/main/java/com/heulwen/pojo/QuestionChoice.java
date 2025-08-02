@@ -47,9 +47,6 @@ public class QuestionChoice implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     Integer id;
-    @Lob
-    @Column(name = "content")
-    String content;
     @Column(name = "isCorrect")
     Boolean isCorrect;
     @JoinColumn(name = "learned_word_id", referencedColumnName = "id")

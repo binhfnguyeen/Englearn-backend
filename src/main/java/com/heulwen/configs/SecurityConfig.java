@@ -4,6 +4,8 @@
  */
 package com.heulwen.configs;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -31,20 +33,14 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final String[] PUBLIC_ENDPOINTS = {
-        "/auth/token"
-    };
-
     @Value("${spring.jwt.signerkey}")
     protected String SIGNER_KEY;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.authorizeHttpRequests(request
-                -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINTS).permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/users").hasAuthority("ROLE_ADMIN")
-                        .anyRequest().authenticated());
+                -> request.requestMatchers(HttpMethod.GET, "/api/secure/users").hasAuthority("ROLE_ADMIN")
+                        .anyRequest().permitAll());
 
         httpSecurity.oauth2ResourceServer(oauth2
                 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
@@ -76,5 +72,16 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
+    }
+    
+     @Bean
+    public Cloudinary cloudinary() {
+        Cloudinary cloudinary
+                = new Cloudinary(ObjectUtils.asMap(
+                        "cloud_name", "dwivkhh8t",
+                        "api_key", "925656835271691",
+                        "api_secret", "xggQhqIzVzwLbOJx05apmM4Od7U",
+                        "secure", true));
+        return cloudinary;
     }
 }

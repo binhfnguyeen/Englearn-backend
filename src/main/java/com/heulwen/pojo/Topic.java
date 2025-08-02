@@ -4,6 +4,7 @@
  */
 package com.heulwen.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import  jakarta.persistence.Basic;
@@ -53,6 +54,7 @@ public class Topic implements Serializable {
     @Column(name = "description")
     String description;
     @ManyToMany(mappedBy = "topicSet")
+    @JsonIgnore
     Set<Vocabulary> vocabularySet;
 
     @Override

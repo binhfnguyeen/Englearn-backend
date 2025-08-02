@@ -13,7 +13,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
     "com.heulwen.services",
     "com.heulwen.mapper",
     "com.heulwen.exceptions",
-    "com.heulwen.configs"
+    "com.heulwen.configs",
+    "com.heulwen.resolvers"
 })
 @EnableJpaRepositories(basePackages = "com.heulwen.repositories")
 @EntityScan(basePackages = "com.heulwen.pojo")
