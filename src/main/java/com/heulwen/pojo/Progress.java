@@ -40,9 +40,8 @@ import lombok.experimental.FieldDefaults;
 @NamedQueries({
     @NamedQuery(name = "Progress.findAll", query = "SELECT p FROM Progress p"),
     @NamedQuery(name = "Progress.findById", query = "SELECT p FROM Progress p WHERE p.id = :id"),
-    @NamedQuery(name = "Progress.findByDaysStudied", query = "SELECT p FROM Progress p WHERE p.daysStudied = :daysStudied"),
-    @NamedQuery(name = "Progress.findByWordsLearned", query = "SELECT p FROM Progress p WHERE p.wordsLearned = :wordsLearned"),
-    @NamedQuery(name = "Progress.findByLevel", query = "SELECT p FROM Progress p WHERE p.level = :level")})
+    @NamedQuery(name = "Progress.findByLearnedDate", query = "SELECT p FROM Progress p WHERE p.learned_date = :learned_date")
+})
 public class Progress implements Serializable {
 
     static final long serialVersionUID = 1L;
@@ -51,13 +50,9 @@ public class Progress implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     Integer id;
-    @Column(name = "days_studied")
+    @Column(name = "learned_date")
     @Temporal(TemporalType.DATE)
-    Date daysStudied;
-    @Column(name = "words_learned")
-    Integer wordsLearned;
-    @Column(name = "level")
-    String level;
+    Date learned_date;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     User userId;

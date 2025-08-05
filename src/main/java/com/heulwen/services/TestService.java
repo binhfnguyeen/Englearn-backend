@@ -4,14 +4,26 @@
  */
 package com.heulwen.services;
 
+import com.heulwen.dto.request.FullTestRequest;
+import com.heulwen.dto.request.QuestionChoiceRequest;
+import com.heulwen.dto.request.QuestionTestRequest;
 import com.heulwen.dto.request.TestRequest;
+import com.heulwen.dto.response.QuestionChoiceResponse;
+import com.heulwen.dto.response.QuestionTestResponse;
+import com.heulwen.dto.response.TestFullResponse;
 import com.heulwen.dto.response.TestResponse;
 import com.heulwen.exceptions.AppException;
 import com.heulwen.exceptions.ErrorCode;
 import com.heulwen.mapper.TestMapper;
+import com.heulwen.pojo.Question;
+import com.heulwen.pojo.QuestionChoice;
 import com.heulwen.pojo.Test;
+import com.heulwen.pojo.Vocabulary;
 import com.heulwen.repositories.TestRepository;
+import com.heulwen.repositories.VocabularyRepository;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -29,7 +41,25 @@ import org.springframework.stereotype.Service;
 public class TestService {
 
     TestRepository testRepository;
+    VocabularyRepository vocabularyRepository;
     TestMapper testMapper;
+
+    private TestFullResponse toTestFullResponse(Test test) {
+        List<QuestionTestResponse> questions = test.getQuestionSet().stream().map(q -> {
+            List<QuestionChoiceResponse> choices = q.getQuestionChoiceSet().stream().map(c -> {
+                return new QuestionChoiceResponse(
+                        c.getId(),
+                        c.getIsCorrect(),
+                        c.getVocabularyId() != null ? c.getVocabularyId().getId() : null,
+                        c.getVocabularyId() != null ? c.getVocabularyId().getWord() : null
+                );
+            }).toList();
+
+            return new QuestionTestResponse(q.getId(), q.getContent(), choices);
+        }).toList();
+
+        return new TestFullResponse(test.getId(), test.getTitle(), test.getDescription(), questions);
+    }
 
     public TestResponse addOrUpdateTest(TestRequest request) {
         Test test;
@@ -56,5 +86,48 @@ public class TestService {
 
     public void deleteTest(int id) {
         testRepository.deleteById(id);
+    }
+
+    public void createFullTest(FullTestRequest request) {
+        Test test = new Test();
+        test.setTitle(request.getTitle());
+        test.setDescription(request.getDescription());
+
+        Set<Question> questions = new HashSet<>();
+
+        for (QuestionTestRequest qr : request.getQuestions()) {
+            Question question = new Question();
+            question.setContent(qr.getContent());
+            question.setTestId(test);
+
+            Set<QuestionChoice> choices = new HashSet<>();
+
+            for (QuestionChoiceRequest cr : qr.getChoices()) {
+                Vocabulary vocab = vocabularyRepository.findById(cr.getVocabularyId())
+                        .orElseThrow(() -> new AppException(ErrorCode.VOCAB_NOT_FOUND));
+
+                QuestionChoice choice = new QuestionChoice();
+                choice.setVocabularyId(vocab);
+                choice.setIsCorrect(cr.isCorrect());
+                choice.setQuestionId(question);
+
+                choices.add(choice);
+            }
+
+            question.setQuestionChoiceSet(choices);
+            questions.add(question);
+        }
+
+        test.setQuestionSet(questions);
+        testRepository.save(test);
+    }
+
+    public List<TestFullResponse> getAllTestsFull() {
+        return testRepository.findAll().stream().map(this::toTestFullResponse).toList();
+    }
+
+    public TestFullResponse getTestFullById(int id) {
+        Test test = testRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.TEST_NOT_FOUND));
+        return toTestFullResponse(test);
     }
 }

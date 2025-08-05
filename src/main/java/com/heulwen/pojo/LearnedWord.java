@@ -6,7 +6,6 @@ package com.heulwen.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Set;
 import  jakarta.persistence.Basic;
 import  jakarta.persistence.Column;
 import  jakarta.persistence.Entity;
@@ -17,10 +16,11 @@ import  jakarta.persistence.JoinColumn;
 import  jakarta.persistence.ManyToOne;
 import  jakarta.persistence.NamedQueries;
 import  jakarta.persistence.NamedQuery;
-import  jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToMany;
 import  jakarta.persistence.Table;
 import  jakarta.persistence.Temporal;
 import  jakarta.persistence.TemporalType;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -60,9 +60,7 @@ public class LearnedWord implements Serializable {
     @JoinColumn(name = "vocabulary_id", referencedColumnName = "id")
     @ManyToOne
     Vocabulary vocabularyId;
-    @OneToMany(mappedBy = "learnedWordId")
-    Set<QuestionChoice> questionChoiceSet;
-
+    
     @Override
     public int hashCode() {
         int hash = 0;

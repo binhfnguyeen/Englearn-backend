@@ -23,7 +23,9 @@ public enum ErrorCode {
     VOCAB_NOT_FOUND(1008, "Vocabulary not found.", HttpStatus.NOT_FOUND),
     TOPIC_NOT_FOUND(1009 , "Topic not found.", HttpStatus.NOT_FOUND),
     QUESTION_NOT_FOUND(1010 , "Question not found.", HttpStatus.NOT_FOUND),
-    TEST_NOT_FOUND(1011 , "Test not found.", HttpStatus.NOT_FOUND)
+    TEST_NOT_FOUND(1011 , "Test not found.", HttpStatus.NOT_FOUND),
+    TEST_RESULTS_NOT_FOUND(1012, "Test results not found.", HttpStatus.NOT_FOUND),
+    CONSERVATION_NOT_FOUND(1013 , "Conservation not found.", HttpStatus.NOT_FOUND)
     ;
             
     private final int code;

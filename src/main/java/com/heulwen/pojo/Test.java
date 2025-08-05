@@ -4,9 +4,11 @@
  */
 package com.heulwen.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
 import  jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import  jakarta.persistence.Column;
 import  jakarta.persistence.Entity;
 import  jakarta.persistence.GeneratedValue;
@@ -52,9 +54,11 @@ public class Test implements Serializable {
     @Lob
     @Column(name = "description")
     String description;
-    @OneToMany(mappedBy = "testId")
+    @OneToMany(mappedBy = "testId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     Set<Question> questionSet;
-    @OneToMany(mappedBy = "testId")
+    @OneToMany(mappedBy = "testId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     Set<TestResults> testResultsSet;
 
     @Override

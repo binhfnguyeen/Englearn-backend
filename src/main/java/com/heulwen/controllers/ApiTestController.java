@@ -4,11 +4,11 @@
  */
 package com.heulwen.controllers;
 
+import com.heulwen.dto.request.FullTestRequest;
 import com.heulwen.dto.request.TestRequest;
-import com.heulwen.dto.request.TopicRequest;
 import com.heulwen.dto.response.ApiResponse;
+import com.heulwen.dto.response.TestFullResponse;
 import com.heulwen.dto.response.TestResponse;
-import com.heulwen.dto.response.TopicResponse;
 import com.heulwen.services.TestService;
 import java.util.List;
 import java.util.Map;
@@ -66,5 +66,27 @@ public class ApiTestController {
     ResponseEntity<?> delete(@PathVariable("id") int id){
         this.testService.deleteTest(id);
         return ResponseEntity.ok(Map.of("message", "Deleted successfully!"));
+    }
+    
+    @PostMapping("/tests/full")
+    ResponseEntity<?> createFullTest(@RequestBody FullTestRequest request){
+        testService.createFullTest(request);
+        return ResponseEntity.ok(Map.of("message", "Test created successfully!"));
+    }
+    
+    @GetMapping("/tests/full")
+    ApiResponse<List<TestFullResponse>> getAllTestsFull(){
+        return ApiResponse.<List<TestFullResponse>>builder()
+                .code(1000)
+                .result(this.testService.getAllTestsFull())
+                .build();
+    }
+    
+    @GetMapping("/tests/full/{id}")
+    ApiResponse<TestFullResponse> getTestFullById(@PathVariable("id") int id){
+        return ApiResponse.<TestFullResponse>builder()
+                .code(1000)
+                .result(this.testService.getTestFullById(id))
+                .build();
     }
 }

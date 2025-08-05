@@ -4,10 +4,8 @@
  */
 package com.heulwen.repositories;
 
-import com.heulwen.pojo.LearnedWord;
+import com.heulwen.pojo.Message;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Repository;
  * @author Dell
  */
 @Repository
-public interface LearnedWordRepository extends JpaRepository<LearnedWord, Integer>{
-    @Query("SELECT COUNT(lw) FROM LearnedWord lw WHERE lw.userId.id = :userId")
-    long sumWordsLearnedByUserId(@Param("userId") int userId);
+public interface MessageRepository extends JpaRepository<Message, Integer>{
+    
 }

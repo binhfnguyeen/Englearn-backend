@@ -4,7 +4,12 @@
  */
 package com.heulwen.exceptions;
 
+import java.time.ZonedDateTime;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 /**
  *
@@ -12,5 +17,18 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    
+    @ExceptionHandler(AppException.class)
+    public ResponseEntity<?> handleException(AppException ex){
+         ErrorCode code = ex.getErrorCode();
+
+        Map<String, Object> errorBody = new HashMap<>();
+        errorBody.put("code", code.getCode());
+        errorBody.put("message", code.getMessage());
+        errorBody.put("status", code.getStatusCode().value());
+        errorBody.put("timestamp", ZonedDateTime.now());
+
+        return ResponseEntity
+                .status(code.getStatusCode())
+                .body(errorBody);
+    }
 }

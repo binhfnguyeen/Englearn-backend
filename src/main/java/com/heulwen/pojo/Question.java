@@ -7,6 +7,7 @@ package com.heulwen.pojo;
 import java.io.Serializable;
 import java.util.Set;
 import  jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import  jakarta.persistence.Column;
 import  jakarta.persistence.Entity;
 import  jakarta.persistence.GeneratedValue;
@@ -54,7 +55,7 @@ public class Question implements Serializable {
     @JoinColumn(name = "test_id", referencedColumnName = "id")
     @ManyToOne
     Test testId;
-    @OneToMany(mappedBy = "questionId")
+    @OneToMany(mappedBy = "questionId", cascade = CascadeType.ALL, orphanRemoval = true)
     Set<QuestionChoice> questionChoiceSet;
 
     @Override

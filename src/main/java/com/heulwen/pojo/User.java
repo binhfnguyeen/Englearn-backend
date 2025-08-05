@@ -92,6 +92,7 @@ public class User implements Serializable {
     Set<TestResults> testResultsSet;
     
     @Transient
+    @JsonIgnore
     MultipartFile file;
 
     @Override

@@ -4,7 +4,7 @@
  */
 package com.heulwen.repositories;
 
-import com.heulwen.pojo.LearnedWord;
+import com.heulwen.pojo.Progress;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,7 +15,11 @@ import org.springframework.stereotype.Repository;
  * @author Dell
  */
 @Repository
-public interface LearnedWordRepository extends JpaRepository<LearnedWord, Integer>{
-    @Query("SELECT COUNT(lw) FROM LearnedWord lw WHERE lw.userId.id = :userId")
-    long sumWordsLearnedByUserId(@Param("userId") int userId);
+public interface ProgressRepository extends JpaRepository<Progress, Integer> {
+
+    @Query("SELECT COUNT(DISTINCT p.learned_date) FROM Progress p WHERE p.userId.id = :userId")
+    long countDistinctDaysByUserId(@Param("userId") int userId);
+
+    @Query("SELECT p FROM Progress p WHERE p.userId.id = :userId")
+    Progress findByUserId(@Param("userId") Integer userId);
 }

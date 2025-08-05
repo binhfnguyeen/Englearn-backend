@@ -5,18 +5,18 @@
 package com.heulwen.pojo;
 
 import java.io.Serializable;
-import  jakarta.persistence.Basic;
-import  jakarta.persistence.Column;
-import  jakarta.persistence.Entity;
-import  jakarta.persistence.GeneratedValue;
-import  jakarta.persistence.GenerationType;
-import  jakarta.persistence.Id;
-import  jakarta.persistence.JoinColumn;
-import  jakarta.persistence.Lob;
-import  jakarta.persistence.ManyToOne;
-import  jakarta.persistence.NamedQueries;
-import  jakarta.persistence.NamedQuery;
-import  jakarta.persistence.Table;
+import jakarta.persistence.Basic;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.Table;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -49,36 +49,36 @@ public class QuestionChoice implements Serializable {
     Integer id;
     @Column(name = "isCorrect")
     Boolean isCorrect;
-    @JoinColumn(name = "learned_word_id", referencedColumnName = "id")
+    @JoinColumn(name = "vocabulary_id", referencedColumnName = "id")
     @ManyToOne
-    LearnedWord learnedWordId;
+    Vocabulary vocabularyId;
     @JoinColumn(name = "question_id", referencedColumnName = "id")
     @ManyToOne
     Question questionId;
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+        return Objects.hash(vocabularyId, questionId);
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof QuestionChoice)) {
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof QuestionChoice)) {
             return false;
         }
-        QuestionChoice other = (QuestionChoice) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+
+        QuestionChoice that = (QuestionChoice) o;
+
+        return Objects.equals(vocabularyId, that.vocabularyId)
+                && Objects.equals(questionId, that.questionId);
     }
 
     @Override
     public String toString() {
         return "com.heulwen.pojo.QuestionChoice[ id=" + id + " ]";
     }
-    
+
 }
