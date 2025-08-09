@@ -20,6 +20,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,20 +41,20 @@ public class VocabularyService {
 
     public VocabularyResponse addOrUpdateVocabulary(VocabularyCreationRequest request, MultipartFile speech, MultipartFile picture) throws IOException {
         Vocabulary vocab;
-        
-        if(request.getId() != null){
+
+        if (request.getId() != null) {
             vocab = vocabularyRepository.findById(request.getId()).orElseThrow(() -> new AppException(ErrorCode.VOCAB_NOT_FOUND));
             vocabularyMapper.updateVocabularyFromRequest(request, vocab);
         } else {
             vocab = vocabularyMapper.toVocabulary(request);
         }
-        
-        if (!picture.isEmpty()) {
+
+        if (picture != null && !picture.isEmpty()) {
             Map res = cloudinary.uploader().upload(picture.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
             vocab.setPicture(res.get("secure_url").toString());
         }
 
-        if (!speech.isEmpty()) {
+        if (speech != null && !speech.isEmpty()) {
             Map res = cloudinary.uploader().upload(speech.getBytes(), ObjectUtils.asMap("resource_type", "video"));
             vocab.setSpeech(res.get("secure_url").toString());
         }
@@ -61,8 +63,15 @@ public class VocabularyService {
         return vocabularyMapper.toVocabularyResponse(saved);
     }
 
-    public List<VocabularyResponse> getVocabularies() {
-        return vocabularyRepository.findAll().stream().map(vocabularyMapper::toVocabularyResponse).toList();
+    public Page<VocabularyResponse> getVocabularies(String keyword, Pageable pageable) {
+        Page<Vocabulary> pageResult;
+
+        if (keyword != null && !keyword.isEmpty()) {
+            pageResult = vocabularyRepository.findByWordContainingIgnoreCase(keyword, pageable);
+        } else {
+            pageResult = vocabularyRepository.findAll(pageable);
+        }
+        return pageResult.map(vocabularyMapper::toVocabularyResponse);
     }
 
     public VocabularyResponse getVocabularyById(int id) {

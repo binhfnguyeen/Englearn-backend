@@ -15,6 +15,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,10 +43,12 @@ public class ApiVocabularyController {
     VocabularyService vocabularyService;
 
     @GetMapping("/vocabularies")
-    ApiResponse<List<VocabularyResponse>> list() {
-        return ApiResponse.<List<VocabularyResponse>>builder()
+    ApiResponse<Page<VocabularyResponse>> list(@RequestParam(required = false) String keyword, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<VocabularyResponse> result = vocabularyService.getVocabularies(keyword, pageable);
+        return ApiResponse.<Page<VocabularyResponse>>builder()
                 .code(1000)
-                .result(vocabularyService.getVocabularies())
+                .result(result)
                 .build();
     }
 

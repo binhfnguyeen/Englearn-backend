@@ -24,6 +24,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -55,8 +57,14 @@ public class TopicService {
         return topicMapper.toTopicResponse(saved);
     }
     
-    public List<TopicResponse> getTopics(){
-        return topicRepository.findAll().stream().map(topicMapper::toTopicResponse).toList();
+    public Page<TopicResponse> getTopics(String keyword, Pageable pageable){
+        Page<Topic> topicResult;
+        if (keyword != null && !keyword.isEmpty()){
+            topicResult = topicRepository.findByNameContainingIgnoreCase(keyword, pageable);
+        } else {
+            topicResult = topicRepository.findAll(pageable);
+        }
+        return topicResult.map(topicMapper::toTopicResponse);
     }
     
     public TopicResponse getTopicById(int id){
@@ -85,9 +93,16 @@ public class TopicService {
                 .build();
     }
     
-    public Set<VocabularyResponse> getVocabulariesWithTopic(int topicId){
-        Topic topic = topicRepository.findById(topicId).orElseThrow(()->new AppException(ErrorCode.TOPIC_NOT_FOUND));
-        Set<Vocabulary> vocabularySet = topic.getVocabularySet();
-        return vocabularySet.stream().map(vocabularyMapper::toVocabularyResponse).collect(Collectors.toSet());
+    public Page<VocabularyResponse> getVocabulariesWithTopic(int topicId, String keyword, Pageable pageable){
+        String searchKeyword = (keyword == null) ? "": keyword;
+        Page<Vocabulary> vocabPage = vocabularyRepository.findByTopicAndKeyword(topicId, searchKeyword, pageable);
+        
+        return vocabPage.map(vocabularyMapper::toVocabularyResponse);
+    }
+    
+    public List<VocabularyResponse> getVocabNotInTopic(int topicId, String keyword){
+        String searchKeyword = (keyword == null) ? "": keyword;
+        List<Vocabulary> vocab = vocabularyRepository.findVocabNotInTopic(topicId, searchKeyword);
+        return vocab.stream().map(vocabularyMapper::toVocabularyResponse).toList();
     }
 }

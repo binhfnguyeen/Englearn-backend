@@ -5,6 +5,8 @@
 package com.heulwen.repositories;
 
 import com.heulwen.pojo.Topic;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,5 +16,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface TopicRepository extends JpaRepository<Topic, Integer>{
-    
+    Page<Topic> findByNameContainingIgnoreCase(String keyword, Pageable pageable);
 }

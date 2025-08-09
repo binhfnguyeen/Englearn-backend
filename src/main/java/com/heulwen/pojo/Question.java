@@ -6,20 +6,21 @@ package com.heulwen.pojo;
 
 import java.io.Serializable;
 import java.util.Set;
-import  jakarta.persistence.Basic;
+import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
-import  jakarta.persistence.Column;
-import  jakarta.persistence.Entity;
-import  jakarta.persistence.GeneratedValue;
-import  jakarta.persistence.GenerationType;
-import  jakarta.persistence.Id;
-import  jakarta.persistence.JoinColumn;
-import  jakarta.persistence.Lob;
-import  jakarta.persistence.ManyToOne;
-import  jakarta.persistence.NamedQueries;
-import  jakarta.persistence.NamedQuery;
-import  jakarta.persistence.OneToMany;
-import  jakarta.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.NamedQueries;
+import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -48,6 +49,7 @@ public class Question implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
+
     Integer id;
     @Lob
     @Column(name = "content")
@@ -59,28 +61,35 @@ public class Question implements Serializable {
     Set<QuestionChoice> questionChoiceSet;
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Question)) {
+            return false;
+        }
+        Question other = (Question) o;
+
+        if (this.id != null && other.id != null) {
+            return this.id.equals(other.id);
+        }
+
+        return Objects.equals(this.content, other.content)
+                && Objects.equals(this.testId, other.testId);
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Question)) {
-            return false;
+    public int hashCode() {
+        if (this.id != null) {
+            return Objects.hash(this.id);
         }
-        Question other = (Question) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+
+        return Objects.hash(content, testId);
     }
 
     @Override
     public String toString() {
         return "com.heulwen.pojo.Question[ id=" + id + " ]";
     }
-    
+
 }

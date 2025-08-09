@@ -51,7 +51,7 @@ public class Topic implements Serializable {
     @Column(name = "name")
     String name;
     @Lob
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "LONGTEXT")
     String description;
     @ManyToMany(mappedBy = "topicSet")
     @JsonIgnore

@@ -17,6 +17,9 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -40,10 +44,12 @@ public class ApiTopicController {
     TopicService topicService;
 
     @GetMapping("/topics")
-    ApiResponse<List<TopicResponse>> list() {
-        return ApiResponse.<List<TopicResponse>>builder()
+    ApiResponse<Page<TopicResponse>> list(@RequestParam(required = false) String keyword, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<TopicResponse> result = topicService.getTopics(keyword, pageable);
+        return ApiResponse.<Page<TopicResponse>>builder()
                 .code(1000)
-                .result(topicService.getTopics())
+                .result(result)
                 .build();
     }
 
@@ -71,19 +77,31 @@ public class ApiTopicController {
     }
     
     @GetMapping("/topics/{topicId}/vocabularies")
-    ApiResponse<Set<VocabularyResponse>> list(@PathVariable("topicId") int topicId){
-        return ApiResponse.<Set<VocabularyResponse>>builder()
+    ApiResponse<Page<VocabularyResponse>> list(@PathVariable("topicId") int topicId, 
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "0") int page, 
+            @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<VocabularyResponse> result = topicService.getVocabulariesWithTopic(topicId, keyword, pageable);
+        return ApiResponse.<Page<VocabularyResponse>>builder()
                 .code(1000)
-                .result(topicService.getVocabulariesWithTopic(topicId))
+                .result(result)
                 .build();
     }
     
     @PostMapping("/topics/{topicId}/vocabularies")
-    ApiResponse<VocabTopicResponse> addVocabToTopic(@PathVariable("topicId") int topicId, @RequestBody int vocabId){
+    ApiResponse<VocabTopicResponse> addVocabToTopic(@PathVariable("topicId") int topicId, @RequestParam("vocabId") int vocabId){
         return ApiResponse.<VocabTopicResponse>builder()
                 .code(1000)
                 .result(topicService.addVocabToTopic(topicId, vocabId))
                 .build();
     }
     
+    @GetMapping("/topics/{topicId}/vocabularies/not-in")
+    ApiResponse<List<VocabularyResponse>> getVocabNotInTopic(@PathVariable("topicId") int topicId, @RequestParam(required = false) String keyword) {
+        return ApiResponse.<List<VocabularyResponse>> builder()
+                .code(1000)
+                .result(this.topicService.getVocabNotInTopic(topicId, keyword))
+                .build();
+    }
 }

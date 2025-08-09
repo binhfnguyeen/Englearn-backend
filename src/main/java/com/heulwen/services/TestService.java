@@ -28,6 +28,8 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -75,8 +77,14 @@ public class TestService {
         return testMapper.toTestResponse(saved);
     }
 
-    public List<TestResponse> getTests() {
-        return testRepository.findAll().stream().map(testMapper::toTestResponse).toList();
+    public Page<TestResponse> getTests(String keyword, Pageable pageable) {
+        Page<Test> testResult;
+        if (keyword != null && !keyword.isEmpty()){
+            testResult = testRepository.findByTitleContainingIgnoreCase(keyword, pageable);
+        } else {
+            testResult = testRepository.findAll(pageable);
+        }
+        return testResult.map(testMapper::toTestResponse);
     }
 
     public TestResponse getTestById(int id) {
