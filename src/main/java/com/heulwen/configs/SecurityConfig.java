@@ -56,6 +56,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/vocabularies/{id}").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/tests/{id}").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/questions/{id}").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/topics/{topicId}/vocabularies").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/secure/profile").authenticated()
                         .anyRequest().permitAll());
 

@@ -104,4 +104,10 @@ public class ApiTopicController {
                 .result(this.topicService.getVocabNotInTopic(topicId, keyword))
                 .build();
     }
+    
+    @DeleteMapping("/topics/{topicId}/vocabularies")
+    ResponseEntity<?> removeVocabFromTopic(@PathVariable("topicId") int topicId, @RequestParam("vocabId") int vocabId){
+        this.topicService.removeVocabFromTopic(topicId, vocabId);
+        return ResponseEntity.ok(Map.of("messages", "Vocabulary has been deleted!"));
+    }
 }

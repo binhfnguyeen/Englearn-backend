@@ -15,7 +15,10 @@ import org.springframework.stereotype.Repository;
  * @author Dell
  */
 @Repository
-public interface LearnedWordRepository extends JpaRepository<LearnedWord, Integer>{
+public interface LearnedWordRepository extends JpaRepository<LearnedWord, Integer> {
+
     @Query("SELECT COUNT(lw) FROM LearnedWord lw WHERE lw.userId.id = :userId")
     long sumWordsLearnedByUserId(@Param("userId") int userId);
+
+    boolean existsByUserId_IdAndVocabularyId_Id(Integer userId, Integer vocabularyId);
 }

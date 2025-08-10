@@ -105,4 +105,14 @@ public class TopicService {
         List<Vocabulary> vocab = vocabularyRepository.findVocabNotInTopic(topicId, searchKeyword);
         return vocab.stream().map(vocabularyMapper::toVocabularyResponse).toList();
     }
+    
+    public void removeVocabFromTopic(int topicId, int vocabId){
+        Topic topic = topicRepository.findById(topicId).orElseThrow(()->new AppException(ErrorCode.TOPIC_NOT_FOUND));
+        Vocabulary vocabulary = vocabularyRepository.findById(vocabId).orElseThrow(()->new AppException(ErrorCode.VOCAB_NOT_FOUND));
+        
+        topic.getVocabularySet().remove(vocabulary);
+        vocabulary.getTopicSet().remove(topic);
+        
+        topicRepository.save(topic);
+    }
 }

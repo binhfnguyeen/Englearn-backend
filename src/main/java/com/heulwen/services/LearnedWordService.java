@@ -33,17 +33,11 @@ public class LearnedWordService {
     LearnedWordMapper learnedWordMapper;
 
     public LearnedWordResponse addLearnedWord(LearnedWordRequest request) {
+        if (learnedWordRepository.existsByUserId_IdAndVocabularyId_Id(request.getUserId(), request.getVocabularyId())){
+            throw new AppException(ErrorCode.WORD_ALREADY_LEARNED);
+        }
         LearnedWord learnedWord = learnedWordMapper.toLearnedWord(request);
         LearnedWord saved = learnedWordRepository.save(learnedWord);
         return learnedWordMapper.toLearnedWordResponse(saved);
-    }
-    
-    public List<LearnedWordResponse> getLearnedWords(){
-        return learnedWordRepository.findAll().stream().map(learnedWordMapper::toLearnedWordResponse).toList();
-    }
-    
-    public LearnedWordResponse getLearnedWordById(int id){
-        LearnedWord learnedWord = learnedWordRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.VOCAB_NOT_FOUND));
-        return learnedWordMapper.toLearnedWordResponse(learnedWord);
     }
 }

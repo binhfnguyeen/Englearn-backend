@@ -32,14 +32,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiLearnedWordController {
     LearnedWordService learnedWordService;
     
-    @GetMapping("/learnedWords")
-    ApiResponse<List<LearnedWordResponse>> list(){
-        return ApiResponse.<List<LearnedWordResponse>>builder()
-                .code(1000)
-                .result(learnedWordService.getLearnedWords())
-                .build();
-    }
-    
     @PostMapping("/learnedWords")
     ApiResponse<LearnedWordResponse> post(@RequestBody LearnedWordRequest request){
         return ApiResponse.<LearnedWordResponse>builder()
@@ -48,11 +40,4 @@ public class ApiLearnedWordController {
                 .build();
     }
     
-    @GetMapping("/learnedWords/{id}")
-    ApiResponse<LearnedWordResponse> retrieve(@PathVariable("id") int id){
-        return ApiResponse.<LearnedWordResponse>builder()
-                .code(1000)
-                .result(learnedWordService.getLearnedWordById(id))
-                .build();
-    }
 }

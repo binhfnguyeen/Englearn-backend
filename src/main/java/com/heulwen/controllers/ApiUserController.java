@@ -47,10 +47,10 @@ public class ApiUserController {
                 .password(params.get("password"))
                 .build();
 
-        ApiResponse<UserResponse> response = new ApiResponse<>();
-
-        response.setResult(userService.createUser(request, avatar));
-        return response;
+        return ApiResponse.<UserResponse>builder()
+                .code(1000)
+                .result(this.userService.createUser(request, avatar))
+                .build();
     }
 
     @GetMapping("/secure/users")
