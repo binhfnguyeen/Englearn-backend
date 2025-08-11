@@ -44,4 +44,9 @@ public class TestResultsService {
         TestResults testResults = testResultsRepository.findById(id).orElseThrow(()->new AppException(ErrorCode.TEST_RESULTS_NOT_FOUND));
         return testResultsMapper.toTestResultsResponse(testResults);
     }
+    
+    public List<TestResultsResponse> getResultTestByUser(int userId, int testId){
+        List<TestResults> testResults = testResultsRepository.findByUserId_IdAndTestId_Id(userId, testId);
+        return testResults.stream().map(testResultsMapper::toTestResultsResponse).toList();
+    }
 }
