@@ -16,12 +16,14 @@ import org.mapstruct.Mapping;
  *
  * @author Dell
  */
-@Mapper(componentModel = "spring", uses = {TestResolver.class, UserResolver.class})
+@Mapper(componentModel = "spring", uses = {TestResolver.class, UserResolver.class, AnswerMapper.class})
 public interface TestResultsMapper {
     
     @Mapping(source = "userId", target = "userId")
     @Mapping(source = "testId", target = "testId")
+    @Mapping(source = "answers", target = "answerSet")
     TestResults toTestResults(TestResultsRequest request);
     
+    @Mapping(source = "answerSet", target = "answers")
     TestResultsResponse toTestResultsResponse(TestResults testResults);
 }

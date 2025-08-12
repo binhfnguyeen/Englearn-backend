@@ -4,6 +4,8 @@
  */
 package com.heulwen.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import  jakarta.persistence.Basic;
@@ -56,9 +58,11 @@ public class LearnedWord implements Serializable {
     Date date;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
+    @JsonIgnore
     User userId;
     @JoinColumn(name = "vocabulary_id", referencedColumnName = "id")
     @ManyToOne
+    @JsonBackReference
     Vocabulary vocabularyId;
     
     @Override

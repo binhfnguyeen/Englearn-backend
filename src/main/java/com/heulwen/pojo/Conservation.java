@@ -4,6 +4,8 @@
  */
 package com.heulwen.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -64,6 +66,7 @@ public class Conservation implements Serializable {
     Date endTime;
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
+    @JsonIgnore
     User userId;
     @OneToMany(mappedBy = "conservationId", fetch = FetchType.EAGER)
     Set<Message> messageSet;

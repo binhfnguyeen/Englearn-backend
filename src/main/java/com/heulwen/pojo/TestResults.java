@@ -4,9 +4,12 @@
  */
 package com.heulwen.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.Date;
 import  jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import  jakarta.persistence.Column;
 import  jakarta.persistence.Entity;
 import  jakarta.persistence.GeneratedValue;
@@ -16,9 +19,11 @@ import  jakarta.persistence.JoinColumn;
 import  jakarta.persistence.ManyToOne;
 import  jakarta.persistence.NamedQueries;
 import  jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import  jakarta.persistence.Table;
 import  jakarta.persistence.Temporal;
 import  jakarta.persistence.TemporalType;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -61,6 +66,9 @@ public class TestResults implements Serializable {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     @ManyToOne
     User userId;
+    @OneToMany(mappedBy = "testResultsId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    Set<Answer> answerSet;
 
     @Override
     public int hashCode() {

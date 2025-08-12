@@ -5,6 +5,7 @@
 package com.heulwen.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.Basic;
@@ -74,8 +75,10 @@ public class Vocabulary implements Serializable {
     Set<Topic> topicSet;
     @OneToMany(mappedBy = "vocabularyId")
     @JsonIgnore
+    @JsonManagedReference
     Set<LearnedWord> learnedWordSet;
     @OneToMany(mappedBy = "vocabularyId")
+    @JsonManagedReference
     Set<QuestionChoice> questionChoiceSet;
 
     @Transient

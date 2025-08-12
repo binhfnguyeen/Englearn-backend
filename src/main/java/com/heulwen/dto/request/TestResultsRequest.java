@@ -5,6 +5,7 @@
 package com.heulwen.dto.request;
 
 import java.util.Date;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,4 +27,5 @@ public class TestResultsRequest {
     Date dateTaken;
     Integer testId;
     Integer userId;
+    List<AnswerRequest> answers;
 }

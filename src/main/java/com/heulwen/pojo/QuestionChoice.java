@@ -4,8 +4,12 @@
  */
 package com.heulwen.pojo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,8 +19,10 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.util.Objects;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,13 +57,24 @@ public class QuestionChoice implements Serializable {
     Boolean isCorrect;
     @JoinColumn(name = "vocabulary_id", referencedColumnName = "id")
     @ManyToOne
+    @JsonBackReference
     Vocabulary vocabularyId;
     @JoinColumn(name = "question_id", referencedColumnName = "id")
     @ManyToOne
+    @JsonBackReference
     Question questionId;
+    @OneToMany(mappedBy = "questionChoiceId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    @JsonIgnore
+    Set<Answer> answerSet;
 
     @Override
     public int hashCode() {
+        // Nếu id đã tồn tại, dùng id để hash
+        if (this.id != null) {
+            return Objects.hash(this.id);
+        }
+        // Nếu không, dùng các trường khác
         return Objects.hash(vocabularyId, questionId);
     }
 
@@ -69,11 +86,14 @@ public class QuestionChoice implements Serializable {
         if (!(o instanceof QuestionChoice)) {
             return false;
         }
+        QuestionChoice other = (QuestionChoice) o;
 
-        QuestionChoice that = (QuestionChoice) o;
+        if (this.id != null && other.id != null) {
+            return this.id.equals(other.id);
+        }
 
-        return Objects.equals(vocabularyId, that.vocabularyId)
-                && Objects.equals(questionId, that.questionId);
+        return Objects.equals(this.vocabularyId, other.vocabularyId)
+                && Objects.equals(this.questionId, other.questionId);
     }
 
     @Override

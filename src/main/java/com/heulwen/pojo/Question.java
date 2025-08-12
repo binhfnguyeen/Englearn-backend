@@ -4,6 +4,7 @@
  */
 package com.heulwen.pojo;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.Set;
 import jakarta.persistence.Basic;
@@ -58,6 +59,7 @@ public class Question implements Serializable {
     @ManyToOne
     Test testId;
     @OneToMany(mappedBy = "questionId", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     Set<QuestionChoice> questionChoiceSet;
 
     @Override
