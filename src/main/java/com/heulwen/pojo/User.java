@@ -84,9 +84,6 @@ public class User implements Serializable {
     Set<LearnedWord> learnedWordSet;
     @OneToMany(mappedBy = "userId")
     @JsonIgnore
-    Set<Conservation> conservationSet;
-    @OneToMany(mappedBy = "userId")
-    @JsonIgnore
     Set<Progress> progressSet;
     @OneToMany(mappedBy = "userId")
     @JsonIgnore

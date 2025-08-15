@@ -31,25 +31,27 @@ import org.springframework.stereotype.Service;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class ProgressService {
+
     ProgressRepository progressRepository;
     LearnedWordRepository learnedWordRepository;
     UserRepository userRepository;
     ProgressMapper progressMapper;
-    
-    public ProgressOverviewResponse getProgressOverview(int userId){
-        User user = userRepository.findById(userId).orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTED));
+
+    public ProgressOverviewResponse getProgressOverview(int userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         long daysStudied = progressRepository.countDistinctDaysByUserId(userId);
         long totalWordsLearned = learnedWordRepository.sumWordsLearnedByUserId(userId);
-        
+
         String level;
-        
-        if (daysStudied >= 10 && totalWordsLearned >= 50)
+
+        if (daysStudied >= 10 && totalWordsLearned >= 50) {
             level = "intermediate";
-        else if (daysStudied >= 5 && totalWordsLearned >= 20)
+        } else if (daysStudied >= 5 && totalWordsLearned >= 20) {
             level = "beginner";
-        else
+        } else {
             level = "newbie";
-        
+        }
+
         return ProgressOverviewResponse.builder()
                 .userId(user)
                 .daysStudied((int) daysStudied)
@@ -57,13 +59,22 @@ public class ProgressService {
                 .level(level)
                 .build();
     }
-    
-    public ProgressResponse updateUserLearnedDay(int userId){
-        User user = userRepository.findById(userId).orElseThrow(()->new AppException(ErrorCode.USER_NOT_EXISTED));
+
+    public ProgressResponse updateUserLearnedDay(int userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        
+        Date today = Date.valueOf(LocalDate.now());
+        
+        boolean exists = progressRepository.existsByUserId_IdAndLearnedDate(userId, today);
+        
+        if (exists) {
+            throw new AppException(ErrorCode.LEARNED_DATE_ALREADY_EXISTS);
+        }
+
         Progress progress = new Progress();
         progress.setUserId(user);
-        progress.setLearned_date(Date.valueOf(LocalDate.now()));
-        
+        progress.setLearnedDate(Date.valueOf(LocalDate.now()));
+
         return progressMapper.toProgressResponse(progressRepository.save(progress));
     }
 }

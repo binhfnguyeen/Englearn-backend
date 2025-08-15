@@ -79,6 +79,7 @@ public class Vocabulary implements Serializable {
     Set<LearnedWord> learnedWordSet;
     @OneToMany(mappedBy = "vocabularyId")
     @JsonManagedReference
+    @JsonIgnore
     Set<QuestionChoice> questionChoiceSet;
 
     @Transient

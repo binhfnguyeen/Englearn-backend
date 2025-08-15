@@ -26,7 +26,8 @@ public enum ErrorCode {
     TEST_NOT_FOUND(1011 , "Test not found.", HttpStatus.NOT_FOUND),
     TEST_RESULTS_NOT_FOUND(1012, "Test results not found.", HttpStatus.NOT_FOUND),
     CONSERVATION_NOT_FOUND(1013 , "Conservation not found.", HttpStatus.NOT_FOUND),
-    WORD_ALREADY_LEARNED(1014 , "Word already learned.", HttpStatus.CREATED)
+    WORD_ALREADY_LEARNED(1014 , "Word already learned.", HttpStatus.CREATED),
+    LEARNED_DATE_ALREADY_EXISTS(1015 , "Learned date already existed.", HttpStatus.CREATED)
     ;
             
     private final int code;

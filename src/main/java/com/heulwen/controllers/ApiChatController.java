@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class ChatController {
+public class ApiChatController {
     ChatService chatService;
     
     @PostMapping("/chat/{conversationId}")

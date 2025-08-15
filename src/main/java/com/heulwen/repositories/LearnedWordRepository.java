@@ -5,6 +5,7 @@
 package com.heulwen.repositories;
 
 import com.heulwen.pojo.LearnedWord;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +22,5 @@ public interface LearnedWordRepository extends JpaRepository<LearnedWord, Intege
     long sumWordsLearnedByUserId(@Param("userId") int userId);
 
     boolean existsByUserId_IdAndVocabularyId_Id(Integer userId, Integer vocabularyId);
+    List<LearnedWord> getLearnedWordByUserId_Id(Integer userId);
 }

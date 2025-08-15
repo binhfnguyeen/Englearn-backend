@@ -4,8 +4,6 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.heulwen.pojo.Test</class>
     <class>com.heulwen.pojo.User</class>
-    <class>com.heulwen.pojo.Conservation</class>
-    <class>com.heulwen.pojo.Message</class>
     <class>com.heulwen.pojo.LearnedWord</class>
     <class>com.heulwen.pojo.Topic</class>
     <class>com.heulwen.pojo.Question</class>

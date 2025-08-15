@@ -40,4 +40,9 @@ public class LearnedWordService {
         LearnedWord saved = learnedWordRepository.save(learnedWord);
         return learnedWordMapper.toLearnedWordResponse(saved);
     }
+    
+    public List<LearnedWordResponse> getLearnedWordsByUser(Integer userId){
+        List<LearnedWord> learnedWords = learnedWordRepository.getLearnedWordByUserId_Id(userId);
+        return learnedWords.stream().map(learnedWordMapper::toLearnedWordResponse).toList();
+    }
 }

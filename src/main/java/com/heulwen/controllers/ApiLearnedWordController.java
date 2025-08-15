@@ -40,4 +40,11 @@ public class ApiLearnedWordController {
                 .build();
     }
     
+    @GetMapping("/learnedWords/{userId}")
+    ApiResponse<List<LearnedWordResponse>> get(@PathVariable("userId") int userId){
+        return ApiResponse.<List<LearnedWordResponse>>builder()
+                .code(1000)
+                .result(this.learnedWordService.getLearnedWordsByUser(userId))
+                .build();
+    }
 }
