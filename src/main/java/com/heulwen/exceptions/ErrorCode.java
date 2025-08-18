@@ -27,7 +27,9 @@ public enum ErrorCode {
     TEST_RESULTS_NOT_FOUND(1012, "Test results not found.", HttpStatus.NOT_FOUND),
     CONSERVATION_NOT_FOUND(1013 , "Conservation not found.", HttpStatus.NOT_FOUND),
     WORD_ALREADY_LEARNED(1014 , "Word already learned.", HttpStatus.CREATED),
-    LEARNED_DATE_ALREADY_EXISTS(1015 , "Learned date already existed.", HttpStatus.CREATED)
+    LEARNED_DATE_ALREADY_EXISTS(1015 , "Learned date already existed.", HttpStatus.CREATED),
+    INVALID_OTP(1016, "Invalid otp.", HttpStatus.NOT_FOUND),
+    OTP_EXPIRED(1017, "Otp expired", HttpStatus.BAD_REQUEST)
     ;
             
     private final int code;
