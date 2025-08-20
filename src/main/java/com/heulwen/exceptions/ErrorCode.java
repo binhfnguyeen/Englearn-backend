@@ -29,7 +29,7 @@ public enum ErrorCode {
     WORD_ALREADY_LEARNED(1014 , "Word already learned.", HttpStatus.CREATED),
     LEARNED_DATE_ALREADY_EXISTS(1015 , "Learned date already existed.", HttpStatus.CREATED),
     INVALID_OTP(1016, "Invalid otp.", HttpStatus.NOT_FOUND),
-    OTP_EXPIRED(1017, "Otp expired", HttpStatus.BAD_REQUEST)
+    OTP_EXPIRED(1017, "Otp expired", HttpStatus.FORBIDDEN)
     ;
             
     private final int code;
