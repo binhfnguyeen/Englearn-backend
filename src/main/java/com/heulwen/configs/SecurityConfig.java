@@ -43,9 +43,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .cors(cors->cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(request
-                -> request.requestMatchers(HttpMethod.GET, "/api/secure/users").hasAuthority("ROLE_ADMIN")
+                        -> request.requestMatchers(HttpMethod.GET, "/api/secure/users").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/vocabularies").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/topics").hasAuthority("ROLE_ADMIN")
@@ -62,8 +62,8 @@ public class SecurityConfig {
 
         httpSecurity.oauth2ResourceServer(oauth2
                 -> oauth2.jwt(jwtConfigurer -> jwtConfigurer
-                                .decoder(jwtDecoder())
-                                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
+                .decoder(jwtDecoder())
+                .jwtAuthenticationConverter(jwtAuthenticationConverter()))
         );
         httpSecurity.csrf(AbstractHttpConfigurer::disable);
         return httpSecurity.build();
@@ -91,8 +91,8 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(10);
     }
-    
-     @Bean
+
+    @Bean
     public Cloudinary cloudinary() {
         Cloudinary cloudinary
                 = new Cloudinary(ObjectUtils.asMap(
@@ -102,17 +102,20 @@ public class SecurityConfig {
                         "secure", true));
         return cloudinary;
     }
-    
-     @Bean
+
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
 
         CorsConfiguration config = new CorsConfiguration();
 
-        config.setAllowedOrigins(List.of("http://localhost:3000/", "https://englearn-frontend.onrender.com/")); 
+        config.setAllowedOrigins(List.of(
+                "http://localhost:3000",
+                "https://englearn-frontend.onrender.com"
+        ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
         config.setExposedHeaders(List.of("Authorization"));
-        config.setAllowCredentials(true); 
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
