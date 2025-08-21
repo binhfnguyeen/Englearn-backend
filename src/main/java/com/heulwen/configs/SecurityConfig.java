@@ -113,7 +113,7 @@ public class SecurityConfig {
                 "https://englearn-frontend.onrender.com"
         ));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        config.addAllowedHeader("*");
         config.setExposedHeaders(List.of("Authorization"));
         config.setAllowCredentials(true);
 
