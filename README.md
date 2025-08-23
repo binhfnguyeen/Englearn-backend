@@ -15,14 +15,6 @@ Pairs with the frontend: 👉 [Englearn-frontend](https://github.com/binhfnguyee
 - Configuration
 - Build & Run
 - API & Docs
-- Security
-- Database & Migrations
-- WebSocket (Realtime Chat)
-- Mapping & DTOs
-- Testing
-- Deployment
-- Contributing
-- License
 
 ---
 
@@ -92,18 +84,18 @@ It exposes REST APIs and a WebSocket gateway for real-time chat between **User <
 ---
 
 ## Project Structure
-src/main/java/com/heulwen
-├─ config/ # Security, WebSocket, Mail, CORS, etc.
-├─ controllers/ # REST controllers
-├─ dto/
-│ ├─ request/ # Request DTOs
-│ └─ response/ # Response DTOs
-├─ exceptions/ # Custom exceptions & handlers
-├─ mapper/ # MapStruct mappers
-├─ pojo/ # JPA entities
-├─ repositories/ # Spring Data repositories
-├─ services/ # Business logic
-└─ resolvers/ # MapStruct resolvers (entity fetching)
+<br>src/main/java/com/heulwen</br>
+<br>├─ config/ # Security, WebSocket, Mail, CORS, etc.</br>
+<br>├─ controllers/ # REST controllers</br>
+<br>├─ dto/</br>
+<br>│ ├─ request/ # Request DTOs</br>
+<br>│ └─ response/ # Response DTOs</br>
+<br>├─ exceptions/ # Custom exceptions & handlers</br>
+<br>├─ mapper/ # MapStruct mappers</br>
+<br>├─ pojo/ # JPA entities</br>
+<br>├─ repositories/ # Spring Data repositories</br>
+<br>├─ services/ # Business logic</br>
+<br>└─ resolvers/ # MapStruct resolvers (entity fetching)</br>
 
 ---
 
@@ -120,11 +112,19 @@ cd Englearn-backend
 
 ### Configuration
 
-- Update src/main/resources/application.properties with your settings:
+- Update `src/main/resources/application.properties` with your settings:
+
+```properties
+# ==============================
+#  Application
+# ==============================
 spring.application.name=elearnweb
 server.port=8080
 server.servlet.context-path=/elearn
 
+# ==============================
+#  Database (MySQL - Aiven)
+# ==============================
 spring.datasource.url=jdbc:mysql://ecomercedb-heulwen.c.aivencloud.com:15750/elearnweb?ssl-mode=REQUIRED
 spring.datasource.username=${AIVEN_USERNAME}
 spring.datasource.password=${AIVEN_PASSWORD}
@@ -135,11 +135,20 @@ spring.jpa.show-sql=true
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 
+# ==============================
+#  Security (JWT)
+# ==============================
 spring.jwt.signerkey=${JWT_SECRET}
 
+# ==============================
+#  File Upload
+# ==============================
 spring.servlet.multipart.max-file-size=20MB
 spring.servlet.multipart.max-request-size=20MB
 
+# ==============================
+#  AI (Gemini Integration)
+# ==============================
 spring.ai.openai.api-key=${OPENAI_API_KEY}
 spring.ai.openai.chat.base-url=https://generativelanguage.googleapis.com
 spring.ai.openai.chat.completions-path=/v1beta/openai/chat/completions
@@ -147,12 +156,16 @@ spring.ai.openai.chat.options.model=gemini-2.0-flash
 spring.ai.chat.memory.repository.jdbc.initialize-schema=always
 logging.level.org.springframework.jdbc.datasource.init.ScriptUtils=DEBUG
 
+# ==============================
+#  Mail (SMTP - Gmail)
+# ==============================
 spring.mail.host=smtp.gmail.com
 spring.mail.port=587
 spring.mail.username=${EMAIL_USERNAME}
 spring.mail.password=${EMAIL_PASSWORD}
 spring.mail.properties.mail.smtp.auth=true
 spring.mail.properties.mail.smtp.starttls.enable=true
+```
 
 ### Build & Run
 
@@ -168,5 +181,5 @@ mvn spring-boot:run
 
 # If Swagger is enabled:
 
-**Swagger UI**: http://localhost:8080/elearn/swagger-ui/index.html
-**OpenAPI JSON**: http://localhost:8080/elearn/v3/api-docs
+<br>**Swagger UI**: http://localhost:8080/elearn/swagger-ui/index.html</br>
+<br>**OpenAPI JSON**: http://localhost:8080/elearn/v3/api-docs</br>
