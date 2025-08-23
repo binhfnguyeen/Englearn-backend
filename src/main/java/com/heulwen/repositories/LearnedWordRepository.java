@@ -22,5 +22,11 @@ public interface LearnedWordRepository extends JpaRepository<LearnedWord, Intege
     long sumWordsLearnedByUserId(@Param("userId") int userId);
 
     boolean existsByUserId_IdAndVocabularyId_Id(Integer userId, Integer vocabularyId);
+
     List<LearnedWord> getLearnedWordByUserId_Id(Integer userId);
+
+    @Query("SELECT lw.userId, COUNT(lw) "
+            + "FROM LearnedWord lw "
+            + "GROUP BY lw.userId")
+    List<Object[]> countLearnedWordsByUser();
 }

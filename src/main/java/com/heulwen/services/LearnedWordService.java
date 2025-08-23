@@ -6,10 +6,13 @@ package com.heulwen.services;
 
 import com.heulwen.dto.request.LearnedWordRequest;
 import com.heulwen.dto.response.LearnedWordResponse;
+import com.heulwen.dto.response.UserStatsResponse;
 import com.heulwen.exceptions.AppException;
 import com.heulwen.exceptions.ErrorCode;
 import com.heulwen.mapper.LearnedWordMapper;
+import com.heulwen.mapper.UserMapper;
 import com.heulwen.pojo.LearnedWord;
+import com.heulwen.pojo.User;
 import com.heulwen.repositories.LearnedWordRepository;
 import java.util.List;
 import lombok.AccessLevel;
@@ -31,18 +34,29 @@ public class LearnedWordService {
     LearnedWordRepository learnedWordRepository;
 
     LearnedWordMapper learnedWordMapper;
+    
+    UserMapper userMapper;
 
     public LearnedWordResponse addLearnedWord(LearnedWordRequest request) {
-        if (learnedWordRepository.existsByUserId_IdAndVocabularyId_Id(request.getUserId(), request.getVocabularyId())){
+        if (learnedWordRepository.existsByUserId_IdAndVocabularyId_Id(request.getUserId(), request.getVocabularyId())) {
             throw new AppException(ErrorCode.WORD_ALREADY_LEARNED);
         }
         LearnedWord learnedWord = learnedWordMapper.toLearnedWord(request);
         LearnedWord saved = learnedWordRepository.save(learnedWord);
         return learnedWordMapper.toLearnedWordResponse(saved);
     }
-    
-    public List<LearnedWordResponse> getLearnedWordsByUser(Integer userId){
+
+    public List<LearnedWordResponse> getLearnedWordsByUser(Integer userId) {
         List<LearnedWord> learnedWords = learnedWordRepository.getLearnedWordByUserId_Id(userId);
         return learnedWords.stream().map(learnedWordMapper::toLearnedWordResponse).toList();
+    }
+
+    public List<UserStatsResponse> getUserLearnedWordsStats() {
+        return learnedWordRepository.countLearnedWordsByUser().stream()
+                .map(obj -> {
+                    User user = (User) obj[0];
+                    Long total = ((Number) obj[1]).longValue();
+                    return new UserStatsResponse(userMapper.toUserResponse(user), total);
+                }).toList();
     }
 }

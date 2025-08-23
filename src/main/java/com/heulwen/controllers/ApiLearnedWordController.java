@@ -7,6 +7,7 @@ package com.heulwen.controllers;
 import com.heulwen.dto.request.LearnedWordRequest;
 import com.heulwen.dto.response.ApiResponse;
 import com.heulwen.dto.response.LearnedWordResponse;
+import com.heulwen.dto.response.UserStatsResponse;
 import com.heulwen.services.LearnedWordService;
 import java.util.List;
 import lombok.AccessLevel;
@@ -30,21 +31,30 @@ import org.springframework.web.bind.annotation.RestController;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
 public class ApiLearnedWordController {
+
     LearnedWordService learnedWordService;
-    
+
     @PostMapping("/learnedWords")
-    ApiResponse<LearnedWordResponse> post(@RequestBody LearnedWordRequest request){
+    ApiResponse<LearnedWordResponse> post(@RequestBody LearnedWordRequest request) {
         return ApiResponse.<LearnedWordResponse>builder()
                 .code(1000)
                 .result(learnedWordService.addLearnedWord(request))
                 .build();
     }
-    
+
     @GetMapping("/learnedWords/{userId}")
-    ApiResponse<List<LearnedWordResponse>> get(@PathVariable("userId") int userId){
+    ApiResponse<List<LearnedWordResponse>> get(@PathVariable("userId") int userId) {
         return ApiResponse.<List<LearnedWordResponse>>builder()
                 .code(1000)
                 .result(this.learnedWordService.getLearnedWordsByUser(userId))
+                .build();
+    }
+
+    @GetMapping("/users/learnedWords")
+    ApiResponse<List<UserStatsResponse>> getUserLearnedWordsStats() {
+        return ApiResponse.<List<UserStatsResponse>>builder()
+                .code(1000)
+                .result(learnedWordService.getUserLearnedWordsStats())
                 .build();
     }
 }
