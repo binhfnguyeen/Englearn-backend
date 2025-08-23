@@ -84,18 +84,20 @@ It exposes REST APIs and a WebSocket gateway for real-time chat between **User <
 ---
 
 ## Project Structure
-<br>src/main/java/com/heulwen</br>
-<br>├─ config/ # Security, WebSocket, Mail, CORS, etc.</br>
-<br>├─ controllers/ # REST controllers</br>
-<br>├─ dto/</br>
-<br>│ ├─ request/ # Request DTOs</br>
-<br>│ └─ response/ # Response DTOs</br>
-<br>├─ exceptions/ # Custom exceptions & handlers</br>
-<br>├─ mapper/ # MapStruct mappers</br>
-<br>├─ pojo/ # JPA entities</br>
-<br>├─ repositories/ # Spring Data repositories</br>
-<br>├─ services/ # Business logic</br>
-<br>└─ resolvers/ # MapStruct resolvers (entity fetching)</br>
+```
+src/main/java/com/heulwen 
+├─ config/ # Security, WebSocket, Mail, CORS, etc. 
+├─ controllers/ # REST controllers 
+├─ dto/ 
+│  ├─ request/ # Request DTOs 
+│  └─ response/ # Response DTOs 
+├─ exceptions/ # Custom exceptions & handlers 
+├─ mapper/ # MapStruct mappers 
+├─ pojo/ # JPA entities 
+├─ repositories/ # Spring Data repositories 
+├─ services/ # Business logic 
+└─ resolvers/ # MapStruct resolvers (entity fetching) 
+```
 
 ---
 
@@ -107,8 +109,10 @@ It exposes REST APIs and a WebSocket gateway for real-time chat between **User <
 - MySQL 8.x  
 
 ### Clone
+```
 git clone https://github.com/binhfnguyeen/Englearn-backend.git
 cd Englearn-backend
+```
 
 ### Configuration
 
@@ -169,6 +173,7 @@ spring.mail.properties.mail.smtp.starttls.enable=true
 
 ### Build & Run
 
+```
 # Clean & build
 mvn clean package
 
@@ -176,10 +181,10 @@ mvn clean package
 mvn spring-boot:run
 
 - Service runs at: http://localhost:8080/elearn
+```
 
 ### API & Docs
 
-# If Swagger is enabled:
-
+If Swagger is enabled:
 <br>**Swagger UI**: http://localhost:8080/elearn/swagger-ui/index.html</br>
 <br>**OpenAPI JSON**: http://localhost:8080/elearn/v3/api-docs</br>
