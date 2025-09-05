@@ -46,19 +46,23 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(request
                         -> request.requestMatchers(HttpMethod.GET, "/api/secure/users").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/secure/users/admin").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/users/{userId}").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/vocabularies").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/topics").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/topics/{topicId}/vocabularies").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/tests").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/tests/full").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/questions").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/secure/users/admin").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/vocabularies/{id}").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/tests/{id}").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/questions/{id}").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/topics/{topicId}/vocabularies").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/secure/users/{userId}/admin").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/secure/profile").authenticated()
                         .anyRequest().permitAll());
 

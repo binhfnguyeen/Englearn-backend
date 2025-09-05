@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.io.Serializable;
 import java.util.Set;
 import  jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import  jakarta.persistence.Column;
 import  jakarta.persistence.Entity;
 import  jakarta.persistence.GeneratedValue;
@@ -79,13 +80,13 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "role")
     String role;
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     Set<LearnedWord> learnedWordSet;
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     Set<Progress> progressSet;
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     Set<TestResults> testResultsSet;
     
