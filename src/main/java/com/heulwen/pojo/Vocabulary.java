@@ -62,9 +62,6 @@ public class Vocabulary implements Serializable {
     String meaning;
     @Column(name = "part_of_speech")
     String partOfSpeech;
-    @Lob
-    @Column(name = "speech")
-    String speech;
     @Column(name = "picture")
     String picture;
     @JoinTable(name = "vocabulary_topic", joinColumns = {
@@ -85,10 +82,6 @@ public class Vocabulary implements Serializable {
     @Transient
     @JsonIgnore
     MultipartFile picFile;
-
-    @Transient
-    @JsonIgnore
-    MultipartFile soundFile;
 
     @Override
     public int hashCode() {

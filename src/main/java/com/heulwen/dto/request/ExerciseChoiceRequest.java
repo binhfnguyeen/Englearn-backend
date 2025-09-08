@@ -2,9 +2,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.heulwen.dto.response;
+package com.heulwen.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,15 +16,11 @@ import lombok.experimental.FieldDefaults;
  * @author Dell
  */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class VocabularyResponse {
-    int id;
-    String word;
-    String meaning;
-    String partOfSpeech;
-    String picture;
+public class ExerciseChoiceRequest {
+    String content;
+    Boolean isCorrect;
 }

@@ -39,7 +39,7 @@ public class VocabularyService {
     VocabularyMapper vocabularyMapper;
     Cloudinary cloudinary;
 
-    public VocabularyResponse addOrUpdateVocabulary(VocabularyCreationRequest request, MultipartFile speech, MultipartFile picture) throws IOException {
+    public VocabularyResponse addOrUpdateVocabulary(VocabularyCreationRequest request, MultipartFile picture) throws IOException {
         Vocabulary vocab;
 
         if (request.getId() != null) {
@@ -52,11 +52,6 @@ public class VocabularyService {
         if (picture != null && !picture.isEmpty()) {
             Map res = cloudinary.uploader().upload(picture.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
             vocab.setPicture(res.get("secure_url").toString());
-        }
-
-        if (speech != null && !speech.isEmpty()) {
-            Map res = cloudinary.uploader().upload(speech.getBytes(), ObjectUtils.asMap("resource_type", "video"));
-            vocab.setSpeech(res.get("secure_url").toString());
         }
 
         Vocabulary saved = vocabularyRepository.save(vocab);

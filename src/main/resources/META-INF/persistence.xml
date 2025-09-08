@@ -13,6 +13,8 @@
     <class>com.heulwen.pojo.Progress</class>
     <class>com.heulwen.pojo.Answer</class>
     <class>com.heulwen.pojo.OtpToken</class>
+    <class>com.heulwen.pojo.ExerciseChoice</class>
+    <class>com.heulwen.pojo.Exercise</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/elearndb?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

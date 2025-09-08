@@ -4,7 +4,8 @@
  */
 package com.heulwen.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.heulwen.pojo.ExerciseType;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,15 +18,14 @@ import lombok.experimental.FieldDefaults;
  * @author Dell
  */
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class VocabularyResponse {
-    int id;
-    String word;
-    String meaning;
-    String partOfSpeech;
-    String picture;
+public class ExerciseResponse {
+    Integer id;
+    String question;
+    ExerciseType exerciseType;
+    Integer vocabularyId; 
+    List<ExerciseChoiceResponse> choices;
 }

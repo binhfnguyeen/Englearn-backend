@@ -9,7 +9,6 @@ import com.heulwen.dto.response.ApiResponse;
 import com.heulwen.dto.response.VocabularyResponse;
 import com.heulwen.services.VocabularyService;
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -55,32 +54,33 @@ public class ApiVocabularyController {
     @PostMapping(path = "/vocabularies", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     ApiResponse<VocabularyResponse> add(
-            @RequestParam(value = "id", required = false) Integer id, @RequestParam("word") String word, @RequestParam("meaning") String meaning, @RequestParam("partOfSpeech") String partOfSpeech,
-            @RequestParam("speech") MultipartFile soundFile, @RequestParam("picture") MultipartFile picFile) throws IOException {
+            @RequestParam(value = "id", required = false) Integer id, @RequestParam("word") String word,
+            @RequestParam("meaning") String meaning, @RequestParam("partOfSpeech") String partOfSpeech,
+            @RequestParam("picture") MultipartFile picFile) throws IOException {
         VocabularyCreationRequest request = new VocabularyCreationRequest();
-        if (id != null){
+        if (id != null) {
             request.setId(id);
         }
         request.setMeaning(meaning);
         request.setWord(word);
         request.setPartOfSpeech(partOfSpeech);
-        VocabularyResponse result = vocabularyService.addOrUpdateVocabulary(request, soundFile, picFile);
+        VocabularyResponse result = vocabularyService.addOrUpdateVocabulary(request, picFile);
         return ApiResponse.<VocabularyResponse>builder()
                 .code(1000)
                 .result(result)
                 .build();
     }
-    
+
     @GetMapping("/vocabularies/{id}")
-    ApiResponse<VocabularyResponse> retrieve(@PathVariable("id") int id){
+    ApiResponse<VocabularyResponse> retrieve(@PathVariable("id") int id) {
         return ApiResponse.<VocabularyResponse>builder()
                 .code(1000)
                 .result(vocabularyService.getVocabularyById(id))
                 .build();
     }
-    
+
     @DeleteMapping("/vocabularies/{id}")
-    ResponseEntity<?> delete(@PathVariable("id") int id){
+    ResponseEntity<?> delete(@PathVariable("id") int id) {
         this.vocabularyService.deleteVocabulary(id);
         return ResponseEntity.ok(Map.of("message", "Deleted successfully"));
     }
