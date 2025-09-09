@@ -29,8 +29,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class ApiChatController {
     ChatService chatService;
     
-    @PostMapping("/chat/{conversationId}")
-    String chat(@RequestBody ChatRequest request, @PathVariable("conversationId") String conversationId) {
-        return chatService.chat(request, conversationId);
+    @PostMapping("/speak/{conversationId}")
+    String speak(@RequestBody ChatRequest request, @PathVariable("conversationId") String conversationId) {
+        return chatService.speak(request, conversationId);
+    }
+    
+    @PostMapping("/assisstant/{conversationId}")
+    String assisstant(@RequestBody ChatRequest request, @PathVariable("conversationId") String conversationId) {
+        return chatService.assisstant(request, conversationId);
     }
 }

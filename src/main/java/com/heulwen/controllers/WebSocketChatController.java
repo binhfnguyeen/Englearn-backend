@@ -22,9 +22,15 @@ public class WebSocketChatController {
     private final ChatService chatService;
     private final SimpMessagingTemplate messagingTemplate;
     
-    @MessageMapping("/chat/{conversationId}")
-    public void chat(@DestinationVariable String conversationId, ChatRequest request){
-        String reply = chatService.chat(request, conversationId);
-        messagingTemplate.convertAndSend("/topic/conversation/" + conversationId, reply);
+    @MessageMapping("/speak/{conversationId}")
+    public void speak(@DestinationVariable String conversationId, ChatRequest request){
+        String reply = chatService.speak(request, conversationId);
+        messagingTemplate.convertAndSend("/topic/conversation/speak/" + conversationId, reply);
+    }
+    
+    @MessageMapping("/assisstant/{conversationId}")
+    public void assisstant(@DestinationVariable String conversationId, ChatRequest request){
+        String reply = chatService.assisstant(request, conversationId);
+        messagingTemplate.convertAndSend("/topic/conversation/assisstant/" + conversationId, reply);
     }
 }
