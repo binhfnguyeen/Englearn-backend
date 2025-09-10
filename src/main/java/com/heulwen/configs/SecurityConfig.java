@@ -48,6 +48,8 @@ public class SecurityConfig {
                         -> request.requestMatchers(HttpMethod.GET, "/api/secure/users").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/secure/users/admin").hasAuthority("ROLE_ADMIN")
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/pronunciation/score/{postId}").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/api/pronunciation/post/{postId}").authenticated()
                         .requestMatchers(HttpMethod.POST, "/api/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/users/{userId}").authenticated()

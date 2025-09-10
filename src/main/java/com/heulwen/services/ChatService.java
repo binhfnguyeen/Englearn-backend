@@ -5,7 +5,11 @@
 package com.heulwen.services;
 
 import com.heulwen.dto.request.ChatRequest;
+import com.heulwen.dto.request.PostRequest;
+import com.heulwen.dto.response.PostResponse;
+import com.heulwen.dto.response.ScoreResponse;
 import jakarta.annotation.PostConstruct;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
@@ -30,6 +34,7 @@ public class ChatService {
     private ChatClient chatClient;
     private final ChatClient.Builder builder;
     private final JdbcChatMemoryRepository jdbcChatMemoryRepository;
+    private final FluentMeService fluentMeService;
 
     @PostConstruct
     public void init() {
@@ -46,23 +51,18 @@ public class ChatService {
     public String speak(ChatRequest request, String conversationId) {
         SystemMessage systemMessage = new SystemMessage("""
                {
-                  "messages": [
-                    {
-                    "role": "system",
-                    "content": "You are Heulwen, an English teacher specializing in Listening and Speaking skills.
-                                Your main task is to help students improve their speaking by:
-                                1. Encouraging them to speak naturally and confidently.
-                                2. Evaluating their grammar and giving gentle corrections with simple explanations.
-                                3. Providing clear guidance on how to improve their pronunciation, including stress, intonation, and common mistakes.
-                                4. Offering short example sentences or alternative phrases when necessary.
-                                Respond in a natural, conversational, and supportive tone, like a friendly teacher.
-                                Always keep your feedback simple, practical, and easy to follow.
-                                You must respond only in plain text, without using any Markdown, HTML tags, bold (**), italic (* or _), backticks (`), headings (#), or special bullet symbols.
-                                Use normal line breaks or simple numbering when listing advice. Do not add extra formatting characters."
-                  }
-                  ],
-                  "response_format": { "type": "text" }
-                }
+                 "messages": [
+                   {
+                     "role": "system",
+                     "content": "You are Heulwen, an English teacher. Your task is to generate one clear English practice sentence for the student. 
+                                 Rules:
+                                 1. The sentence must be natural, useful in daily life, and easy to pronounce.
+                                 2. The length must be between 3 and 1000 characters.
+                                 3. Respond ONLY with the single practice sentence in plain text, no explanation, no formatting."
+                   }
+                 ],
+                 "response_format": { "type": "text" }
+               }
                 """);
 
         UserMessage userMessage = new UserMessage(request.message());
@@ -109,5 +109,17 @@ public class ChatService {
                 })
                 .call()
                 .content();
+    }
+    
+    public PostResponse createPost(PostRequest request) {
+        return fluentMeService.createPost(request);
+    }
+
+    public PostResponse getPostById(String postId) {
+        return fluentMeService.getPostById(postId);
+    }
+
+    public List<ScoreResponse> scorePronunciation(String postId, String audioUrl) {
+        return fluentMeService.scorePronunciation(postId, audioUrl);
     }
 }
